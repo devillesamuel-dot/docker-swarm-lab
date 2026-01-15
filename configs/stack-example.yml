@@ -1,0 +1,79 @@
+version: '3.8'
+
+# Stack d'exemple avec services web + visualizer + base de données
+# Déploiement : docker stack deploy -c stack-example.yml demo
+
+services:
+  # Service web (nginx) avec réplication
+  web:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    deploy:
+      replicas: 3
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      placement:
+        constraints:
+          - node.role == worker
+    networks:
+      - frontend
+
+  # Visualizer pour voir l'état du cluster
+  visualizer:
+    image: dockersamples/visualizer:latest
+    ports:
+      - "8081:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+    networks:
+      - frontend
+
+  # Base de données PostgreSQL (exemple)
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_PASSWORD: example_password
+      POSTGRES_USER: demo_user
+      POSTGRES_DB: demo_db
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+    networks:
+      - backend
+
+  # Application exemple connectée à la BDD
+  app:
+    image: adminer
+    ports:
+      - "8082:8080"
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+    networks:
+      - frontend
+      - backend
+
+networks:
+  frontend:
+    driver: overlay
+  backend:
+    driver: overlay
+
+volumes:
+  db-data:

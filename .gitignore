@@ -1,0 +1,40 @@
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Fichiers d'éditeur
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Fichiers temporaires
+*.tmp
+*.bak
+
+# Fichiers VMware (si des fichiers VM sont accidentellement ajoutés)
+*.vmdk
+*.vmx
+*.vmxf
+*.nvram
+*.vmsd
+
+# Fichiers de test locaux
+test/
+tmp/
+
+# Screenshots personnalisés (garder uniquement les exemples)
+screenshots/*.png
+!screenshots/example-*.png
+
+# Variables d'environnement sensibles
+.env
+secrets/
+
+# Backups
+backup/
+*.backup

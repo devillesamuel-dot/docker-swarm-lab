@@ -1,0 +1,17 @@
+# Configuration réseau pour swarm-manager
+# IP statique : 192.168.100.10
+# À copier dans : /etc/netplan/00-installer-config.yaml
+
+network:
+  version: 2
+  ethernets:
+    ens33:
+      addresses:
+        - 192.168.100.10/24
+      routes:
+        - to: default
+          via: 192.168.100.1
+      nameservers:
+        addresses:
+          - 8.8.8.8
+          - 8.8.4.4

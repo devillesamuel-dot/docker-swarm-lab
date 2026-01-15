@@ -1,0 +1,17 @@
+# Configuration réseau pour swarm-worker1
+# IP statique : 192.168.100.11
+# À copier dans : /etc/netplan/00-installer-config.yaml
+
+network:
+  version: 2
+  ethernets:
+    ens33:
+      addresses:
+        - 192.168.100.11/24
+      routes:
+        - to: default
+          via: 192.168.100.1
+      nameservers:
+        addresses:
+          - 8.8.8.8
+          - 8.8.4.4
